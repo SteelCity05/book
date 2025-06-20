@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Image Flip Book</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #fafafa;
+            overflow: hidden;
+        }
+
+        #flipbook-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #flipbook {
+            position: relative;
+        }
+
+        #flipbook .page {
+            background-color: white;
+            border: 1px solid #c9c9c9;
+        }
+
+        #flipbook .page img,
+        #flipbook .hard img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #flipbook .hard {
+            background-color: #333;
+            border: 1px solid #c9c9c9;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="flipbook-container">
+        <div id="flipbook">
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            const imageUrls = [
+                "images/image_1.jpg",
+                "images/image_2.jpg",
+                "images/image_3.jpg",
+                "images/image_4.jpg",
+                "images/image_5.jpg",
+                "images/image_6.jpg",
+                "images/image_7.jpg",
+                "images/image_8.jpg",
+                "images/image_9.jpg",
+                "images/image_10.jpg",
+                "images/image_11.jpg",
+                "images/image_12.jpg",
+                "images/image_13.jpg",
+                "images/image_14.jpg",
+                "images/image_15.jpg",
+                "images/image_16.jpg",
+                "images/image_17.jpg",
+                "images/image_18.jpg",
+                "images/image_19.jpg",
+                "images/image_20.jpg",
+                "images/image_21.jpg",
+                "images/image_22.jpg",
+                "images/image_23.jpg",
+                "images/image_24.jpg",
+                "images/image_25.jpg",
+                "images/image_26.jpg",
+                "images/image_27.jpg",
+                "images/image_28.jpg",
+                "images/image_29.jpg",
+                "images/image_30.jpg",
+            ];
+
+            const $flipbook = $('#flipbook');
+            $flipbook.append('<div class="hard"></div>');
+
+            imageUrls.forEach((url, index) => {
+                const isCover = index === 0 || index === imageUrls.length - 1;
+                const pageClass = isCover ? 'hard' : 'page';
+                $flipbook.append(`<div class="${pageClass}"><img src="${url}" alt="Page ${index + 1}"></div>`);
+            });
+
+            $flipbook.append('<div class="hard"></div>');
+
+            const bookAspectRatio = 2.59;
+
+            function resizeFlipbook() {
+                const containerWidth = $('#flipbook-container').width();
+                const containerHeight = $('#flipbook-container').height();
+                let bookWidth, bookHeight;
+
+                if (containerWidth / containerHeight > bookAspectRatio) {
+                    bookHeight = containerHeight * 0.9;
+                    bookWidth = bookHeight * bookAspectRatio;
+                } else {
+                    bookWidth = containerWidth * 0.9;
+                    bookHeight = bookWidth / bookAspectRatio;
+                }
+
+                $flipbook.turn('size', bookWidth, bookHeight);
+            }
+
+            $flipbook.turn({
+                display: 'double',
+                autoCenter: true,
+                elevation: 50,
+                gradients: true,
+                width: 1,
+                height: 1
+            });
+
+            resizeFlipbook();
+            $(window).on('resize', resizeFlipbook);
+        });
+    </script>
+
+</body>
+</html>
