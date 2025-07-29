@@ -1,0 +1,321 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Book</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #FFFFFF;
+        font-family: sans-serif;
+        overflow: hidden;
+    }
+
+    input {
+        display: none;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    .book-wrapper {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .book {
+        position: relative;
+        perspective: 1500px;
+        width: 1024px;
+        height: 791px;
+        transform-origin: center center;
+    }
+
+    .flip-page {
+        width: 50%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform-origin: left;
+        transform-style: preserve-3d;
+        /* THIS IS THE FIX: Apply a step-end transition to z-index */
+        transition: transform 0.7s ease-in-out, z-index 0s 0.35s;
+    }
+
+    .front, .back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        backface-visibility: hidden;
+        box-shadow: none;
+    }
+
+    .back {
+        transform: rotateY(180deg);
+    }
+
+    .next-btn, .back-btn {
+        position: absolute;
+        bottom: 210px;
+        padding: 5px 10px;
+        background: rgba(0,0,0,0.6);
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .next-btn {
+        right: 13px;
+    }
+
+    .back-btn {
+        left: 13px;
+    }
+
+    #p1 { z-index: 15; }
+    #p2 { z-index: 14; }
+    #p3 { z-index: 13; }
+    #p4 { z-index: 12; }
+    #p5 { z-index: 11; }
+    #p6 { z-index: 10; }
+    #p7 { z-index: 9; }
+    #p8 { z-index: 8; }
+    #p9 { z-index: 7; }
+    #p10 { z-index: 6; }
+    #p11 { z-index: 5; }
+    #p12 { z-index: 4; }
+    #p13 { z-index: 3; }
+    #p14 { z-index: 2; }
+    #p15 { z-index: 1; }
+
+    /* Restoring your original, correct z-index logic */
+    #c1:checked ~ .book-wrapper .book #p1 { transform: rotateY(-180deg); z-index: 1; }
+    #c1:checked ~ .book-wrapper .book #p2 { z-index: 16; }
+    #c2:checked ~ .book-wrapper .book #p2 { transform: rotateY(-180deg); z-index: 2; }
+    #c2:checked ~ .book-wrapper .book #p3 { z-index: 16; }
+    #c3:checked ~ .book-wrapper .book #p3 { transform: rotateY(-180deg); z-index: 3; }
+    #c3:checked ~ .book-wrapper .book #p4 { z-index: 16; }
+    #c4:checked ~ .book-wrapper .book #p4 { transform: rotateY(-180deg); z-index: 4; }
+    #c4:checked ~ .book-wrapper .book #p5 { z-index: 16; }
+    #c5:checked ~ .book-wrapper .book #p5 { transform: rotateY(-180deg); z-index: 5; }
+    #c5:checked ~ .book-wrapper .book #p6 { z-index: 16; }
+    #c6:checked ~ .book-wrapper .book #p6 { transform: rotateY(-180deg); z-index: 6; }
+    #c6:checked ~ .book-wrapper .book #p7 { z-index: 16; }
+    #c7:checked ~ .book-wrapper .book #p7 { transform: rotateY(-180deg); z-index: 7; }
+    #c7:checked ~ .book-wrapper .book #p8 { z-index: 16; }
+    #c8:checked ~ .book-wrapper .book #p8 { transform: rotateY(-180deg); z-index: 8; }
+    #c8:checked ~ .book-wrapper .book #p9 { z-index: 16; }
+    #c9:checked ~ .book-wrapper .book #p9 { transform: rotateY(-180deg); z-index: 9; }
+    #c9:checked ~ .book-wrapper .book #p10 { z-index: 16; }
+    #c10:checked ~ .book-wrapper .book #p10 { transform: rotateY(-180deg); z-index: 10; }
+    #c10:checked ~ .book-wrapper .book #p11 { z-index: 16; }
+    #c11:checked ~ .book-wrapper .book #p11 { transform: rotateY(-180deg); z-index: 11; }
+    #c11:checked ~ .book-wrapper .book #p12 { z-index: 16; }
+    #c12:checked ~ .book-wrapper .book #p12 { transform: rotateY(-180deg); z-index: 12; }
+    #c12:checked ~ .book-wrapper .book #p13 { z-index: 16; }
+    #c13:checked ~ .book-wrapper .book #p13 { transform: rotateY(-180deg); z-index: 13; }
+    #c13:checked ~ .book-wrapper .book #p14 { z-index: 16; }
+    #c14:checked ~ .book-wrapper .book #p14 { transform: rotateY(-180deg); z-index: 14; }
+    #c14:checked ~ .book-wrapper .book #p15 { z-index: 16; }
+    #c15:checked ~ .book-wrapper .book #p15 { transform: rotateY(-180deg); z-index: 15; }
+</style>
+</head>
+<body>
+    <input type="checkbox" id="c1"><input type="checkbox" id="c2"><input type="checkbox" id="c3">
+    <input type="checkbox" id="c4"><input type="checkbox" id="c5"><input type="checkbox" id="c6">
+    <input type="checkbox" id="c7"><input type="checkbox" id="c8"><input type="checkbox" id="c9">
+    <input type="checkbox" id="c10"><input type="checkbox" id="c11"><input type="checkbox" id="c12">
+    <input type="checkbox" id="c13"><input type="checkbox" id="c14"><input type="checkbox" id="c15">
+
+    <div class="book-wrapper">
+        <div class="book">
+            <div class="flip-page" id="p1">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(2).jpg?csf=1&web=1&e=pXbtfq" alt="Page 1">
+                <label for="c1" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(1).jpg?csf=1&web=1&e=pXbtfq" alt="Front cover">
+                <label for="c1" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p2">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(4).jpg?csf=1&web=1&e=pXbtfq" alt="Page 3">
+                <label for="c2" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(3).jpg?csf=1&web=1&e=pXbtfq" alt="Page 2">
+                <label for="c2" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p3">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(6).jpg?csf=1&web=1&e=pXbtfq" alt="Page 5">
+                <label for="c3" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(5).jpg?csf=1&web=1&e=pXbtfq" alt="Page 4">
+                <label for="c3" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p4">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(8).jpg?csf=1&web=1&e=pXbtfq" alt="Page 7">
+                <label for="c4" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(7).jpg?csf=1&web=1&e=pXbtfq" alt="Page 6">
+                <label for="c4" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p5">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(10).jpg?csf=1&web=1&e=pXbtfq" alt="Page 9">
+                <label for="c5" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(9).jpg?csf=1&web=1&e=pXbtfq" alt="Page 8">
+                <label for="c5" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p6">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(12).jpg?csf=1&web=1&e=pXbtfq" alt="Page 11">
+                <label for="c6" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(11).jpg?csf=1&web=1&e=pXbtfq" alt="Page 10">
+                <label for="c6" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p7">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(14).jpg?csf=1&web=1&e=pXbtfq" alt="Page 13">
+                <label for="c7" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(13).jpg?csf=1&web=1&e=pXbtfq" alt="Page 12">
+                <label for="c7" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p8">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(16).jpg?csf=1&web=1&e=pXbtfq" alt="Page 15">
+                <label for="c8" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(15).jpg?csf=1&web=1&e=pXbtfq" alt="Page 14">
+                <label for="c8" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p9">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(18).jpg?csf=1&web=1&e=pXbtfq" alt="Page 17">
+                <label for="c9" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(17).jpg?csf=1&web=1&e=pXbtfq" alt="Page 16">
+                <label for="c9" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p10">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(20).jpg?csf=1&web=1&e=pXbtfq" alt="Page 19">
+                <label for="c10" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(19).jpg?csf=1&web=1&e=pXbtfq" alt="Page 18">
+                <label for="c10" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p11">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(22).jpg?csf=1&web=1&e=pXbtfq" alt="Page 21">
+                <label for="c11" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(21).jpg?csf=1&web=1&e=pXbtfq" alt="Page 20">
+                <label for="c11" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p12">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(24).jpg?csf=1&web=1&e=pXbtfq" alt="Page 23">
+                <label for="c12" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(23).jpg?csf=1&web=1&e=pXbtfq" alt="Page 22">
+                <label for="c12" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p13">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(26).jpg?csf=1&web=1&e=pXbtfq" alt="Page 25">
+                <label for="c13" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(25).jpg?csf=1&web=1&e=pXbtfq" alt="Page 24">
+                <label for="c13" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p14">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(28).jpg?csf=1&web=1&e=pXbtfq" alt="Page 27">
+                <label for="c14" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(27).jpg?csf=1&web=1&e=pXbtfq" alt="Page 26">
+                <label for="c14" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        <div class="flip-page" id="p15">
+            <div class="back">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(30).jpg?csf=1&web=1&e=pXbtfq" alt="Back Cover">
+                <label for="c15" class="back-btn">&lt; Back</label>
+            </div>
+            <div class="front">
+                <img src="https://panynj.sharepoint.com/:i:/r/sites/TEC_Department/SiteAssets/WelcomePacket/PABrandingImages/image%20(29).jpg?csf=1&web=1&e=pXbtfq" alt="Page 28">
+                <label for="c15" class="next-btn">Next &gt;</label>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+    function scaleBookToFit() {
+        const book = document.querySelector('.book');
+        const wrapper = document.querySelector('.book-wrapper');
+
+        const scaleX = wrapper.clientWidth / 1024;
+        const scaleY = wrapper.clientHeight / 791;
+        const scale = Math.min(scaleX, scaleY);
+
+        book.style.transform = `scale(${scale})`;
+    }
+
+    window.addEventListener('resize', scaleBookToFit);
+    window.addEventListener('DOMContentLoaded', scaleBookToFit);
+    </script>
+</body>
+</html>
